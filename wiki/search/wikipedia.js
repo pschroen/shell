@@ -54,7 +54,7 @@ function parseResults(probe, response, url) {
             probe.item.text = match[1];
             probe.reload();
         } else {
-            probe.log("["+exports.id+"] Found page "+page.title);
+            probe.log("["+exports.id+"] Found page "+title);
             match = /<p>(.*?)<\/p>/.exec(extract);
             // Build infobox
             probe.item.infobox = {
@@ -62,9 +62,9 @@ function parseResults(probe, response, url) {
                     fields: {
                         info: {
                             type: 'info',
-                            title: page.title,
+                            title: title,
                             text: match[1],
-                            credits: [{title:exports.name, href:url}]
+                            credits: [{title:exports.name, href:probe.search[probe.searchid]+'/wiki/'+title.replace(/\s/g, '_')}]
                         }
                     }
                 }]
