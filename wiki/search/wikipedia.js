@@ -64,7 +64,13 @@ function parseResults(probe, response, url) {
                             type: 'info',
                             title: title,
                             text: match[1],
-                            credits: [{title:exports.name, href:probe.search[probe.searchid]+'/wiki/'+title.replace(/\s/g, '_')}]
+                            credits: [{
+                                title: exports.name,
+                                href: probe.search[probe.searchid]+'/wiki/'+title.replace(/\s/g, '_')
+                            }],
+                            buttons: [{
+                                label: "Escape (esc)"
+                            }]
                         }
                     }
                 }]
