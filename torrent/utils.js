@@ -167,7 +167,7 @@ Utils.prototype.searchText = searchText;
  */
 function text(probe) {
     "use strict";
-    return probe.item.text.replace(/^(.*?),/, '$1');
+    return probe.item.text.replace(/^(.*?),.*/, '$1');
 }
 Utils.prototype.text = text;
 
