@@ -72,7 +72,7 @@ function getResults(probe, page, url) {
     }, probe.item.text.replace(/^the\s/i, '').replace(/^(.*?).S?\d{2}.*/i, '$1'));
     if (!exports.results) {
         page.close();
-        probe.error("["+exports.id+"] No results");
+        probe.error("["+exports.id+"] No search results");
     }
 }
 Script.prototype.getResults = getResults;
@@ -89,8 +89,8 @@ function parseResults(probe, page, url) {
     // Clone to make results writable
     exports.results = utils.clone(page.evaluate(function (pattern) {
         var results = [];
-        $("a[href^='magnet:']").each(function (index, link) {
-            var href = $(link).attr('href');
+        $("a[href^='magnet:']").each(function () {
+            var href = $(this).attr('href');
             if ((new RegExp(pattern, 'i')).test(href)) results.push({filename:href});
         });
         return results;
@@ -105,14 +105,13 @@ function parseResults(probe, page, url) {
         try {
             probe.type.parseResults(probe, page, exports.results);
         } catch (err) {
-            page.close();
             shell.error(err);
             shell.exit();
         }
     } else {
-        page.close();
         probe.error("["+exports.id+"] No results");
     }
+    page.close();
 }
 Script.prototype.parseResults = parseResults;
 

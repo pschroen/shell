@@ -56,16 +56,17 @@ function parseResults(probe, page, url) {
     "use strict";
     exports.results = page.evaluate(function () {
         var results = [];
-        $("a[href^='/browse/']").each(function (index, link) {
-            results.push($(link).attr('href'));
+        $("a[href^='/browse/']").each(function () {
+            results.push($(this).attr('href'));
         });
         return results;
     });
     if (exports.results.length) {
-        exports.box(probe, page, url);
+        exports.box(probe, url);
     } else {
         probe.error("["+exports.id+"] No results");
     }
+    page.close();
 }
 Script.prototype.parseResults = parseResults;
 
@@ -73,14 +74,11 @@ Script.prototype.parseResults = parseResults;
  * Infobox helper.
  *
  * @param    {Probe} probe Instance
- * @param    {WebPage} page Instance
  * @param    {string} url
  */
-function box(probe, page, url) {
+function box(probe, url) {
     "use strict";
-    // Page not needed
-    if (page) page.close();
-    // Map id to type
+    // Map types
     var types = [];
     exports.results.forEach(function (item) {
         switch (item) {

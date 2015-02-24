@@ -57,12 +57,12 @@ function parseResults(probe, page, url) {
     // Clone to make results writable
     exports.results = utils.clone(page.evaluate(function (pattern) {
         var results = [];
-        $("a[href^='magnet:']").each(function (index, link) {
-            var href = $(link).attr('href');
+        $("a[href^='magnet:']").each(function () {
+            var href = $(this).attr('href');
             if ((new RegExp(pattern, 'i')).test(href)) {
                 results.push({
                     filename: href,
-                    size: $(link).closest('td').next().text()
+                    size: $(this).closest('td').next().text()
                 });
             }
         });
@@ -79,14 +79,13 @@ function parseResults(probe, page, url) {
         try {
             probe.type.parseResults(probe, page, exports.results);
         } catch (err) {
-            page.close();
             shell.error(err);
             shell.exit();
         }
     } else {
-        page.close();
         probe.error("["+exports.id+"] No results");
     }
+    page.close();
 }
 Script.prototype.parseResults = parseResults;
 
