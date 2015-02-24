@@ -17,20 +17,30 @@ var utils = require('./utils'),
  * Initialize.
  *
  * @param    {Probe} probe Instance
- * @param    {undefined|initCallback} [callback]
+ * @param    {undefined|initCallback|extractCallback} [callback]
+ * @param    {undefined|boolean} [extract]
  */
-function init(probe, callback) {
+function init(probe, callback, extract) {
     "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name+" and searching for "+probe.item.text);
     var url = probe.search[probe.searchid]+'/w/api.php?format=json&action=query&titles='+utils.searchText(probe)+'&prop=revisions|extracts&rvprop=content&continue';
     probe.get({url:url}, function (error, args) {
         if (!error) {
-            exports.parseResults(probe, JSON.parse(args.body), url);
+/**
+ * Extract callback.
+ *
+ * @callback extractCallback
+ * @param    {undefined|Infobox} [box]
+ */
+            exports.parseResults(probe, JSON.parse(args.body), url, extract ? function (box) {
+                callback(box);
+            } : null);
         } else {
             probe.error("["+exports.id+"] JSON endpoint "+url+" error: "+error);
+            if (extract) callback();
         }
     });
-    if (callback) callback();
+    if (callback && !extract) callback();
 }
 Script.prototype.init = init;
 
@@ -40,8 +50,9 @@ Script.prototype.init = init;
  * @param    {Probe} probe Instance
  * @param    {Object} response
  * @param    {string} url
+ * @param    {undefined|extractCallback} [callback]
  */
-function parseResults(probe, response, url) {
+function parseResults(probe, response, url, callback) {
     "use strict";
     for (var x in response.query.pages) {
         var page = response.query.pages[x],
@@ -56,26 +67,28 @@ function parseResults(probe, response, url) {
         } else {
             probe.log("["+exports.id+"] Found page "+title);
             match = /<p>(.*?)<\/p>/.exec(extract);
-            // Build infobox
-            probe.item.infobox = {
-                boxes: [{
-                    fields: {
-                        info: {
-                            type: 'info',
-                            title: title,
-                            text: match[1],
-                            credits: [{
-                                title: exports.name,
-                                href: probe.search[probe.searchid]+'/wiki/'+title.replace(/\s/g, '_')
-                            }],
-                            buttons: [{
-                                label: "Escape (esc)"
-                            }]
-                        }
+            var box = {
+                fields: {
+                    info: {
+                        type: 'info',
+                        title: title,
+                        text: match[1],
+                        credits: [{
+                            title: exports.name,
+                            href: probe.search[probe.searchid]+'/wiki/'+title.replace(/\s/g, '_')
+                        }],
+                        buttons: [{
+                            label: "Escape (esc)"
+                        }]
                     }
-                }]
+                }
             };
-            probe.box("["+exports.id+"] Infobox");
+            if (callback) {
+                callback(box);
+            } else {
+                probe.item.infobox = {boxes:[box]};
+                probe.box("["+exports.id+"] Infobox");
+            }
         }
     }
 }
