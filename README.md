@@ -16,6 +16,19 @@ Create a new *List* with a *Shell* of `wiki` and add the following to your *Ghos
 ```
 
 
+## `audio`
+
+The `audio` *Shell* requires the `stream` *API* script in your *API* *List*. The following config is for an install in your home directory, with a `Music` directory.
+
+```json
+...
+    "audio": {
+        "path": "../Music"
+    }
+...
+```
+
+
 ## Resources
 
 * [The Headless Wiki](https://github.com/pschroen/headless/wiki)
