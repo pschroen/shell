@@ -35,7 +35,7 @@ Utils.prototype.searchTextToPatternQuality = searchTextToPatternQuality;
  */
 function searchTextToPattern(probe) {
     "use strict";
-    return utils.termsToPattern(utils.textToPattern(searchTextPattern(probe));
+    return utils.termsToPattern(utils.textToPattern(searchTextPattern(probe)));
 }
 Utils.prototype.searchTextToPattern = searchTextToPattern;
 
