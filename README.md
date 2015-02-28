@@ -28,6 +28,21 @@ The `audio` *Shell* requires the `stream` *API* script in your *API* *List*. The
 ...
 ```
 
+You can also play Internet radio, for Shoutcast streams append a semicolon (`;`) to the URL and add the following to your *Ghost* config `list` memories.
+
+```json
+...
+    "memory": {
+        "list": {
+            "proton radio": {
+                "src": "http://protonradio.com:7000/;",
+                "type": "audio/mpeg"
+            }
+        }
+    }
+...
+```
+
 
 ## Resources
 
