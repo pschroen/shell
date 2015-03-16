@@ -1,7 +1,7 @@
 /**
  * Headless Transmission Web Interface.
  *
- * @author   Patrick Schroen <ps@ufotechnologies.com>
+ * @author   Patrick Schroen / https://github.com/pschroen
  * @license  MIT Licensed
  */
 

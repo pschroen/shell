@@ -1,7 +1,7 @@
 /**
  * Headless Wiki search utilities.
  *
- * @author   Patrick Schroen <ps@ufotechnologies.com>
+ * @author   Patrick Schroen / https://github.com/pschroen
  * @license  MIT Licensed
  */
 
