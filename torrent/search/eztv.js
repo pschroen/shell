@@ -69,7 +69,7 @@ function getResults(probe, page, url) {
         });
         return results;
     // Strip 'the ', season, episode and date from search text
-    }, probe.item.text.replace(/^the\s/i, '').replace(/^(.*?).S?\d{2}.*/i, '$1'));
+    }, probe.item.text.replace(/^the\s/i, '').replace(/^(.*?).s?\d{2}.*/i, '$1'));
     if (!exports.results) {
         page.close();
         probe.error("["+exports.id+"] No search results");

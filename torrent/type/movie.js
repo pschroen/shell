@@ -58,7 +58,7 @@ function parseResults(probe, page, results) {
     })();
     // Add new movie
     var destfiles = fs.list(probe.memory.list[probe.item.text].dest || probe.remember({dest:shell.torrent.types[probe.item.type].dest}).dest).join('|');
-    if (!(new RegExp(utils.searchTextToPattern(probe), 'i')).test(destfiles)) {
+    if (!(new RegExp('\\b'+utils.searchTextToPattern(probe)+'\\b', 'i')).test(destfiles)) {
         probe.log("["+exports.id+"] Torrent for "+item.name);
         if (probe.item.infobox) {
             probe.config.box(probe, [item]);

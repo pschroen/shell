@@ -287,7 +287,7 @@ Script.prototype.torrentList = torrentList;
  * Login helper.
  *
  * @param    {Probe} probe Instance
- * @param    {string[]} headers
+ * @param    {null|Object[]} headers
  * @param    {function} callback
  */
 function login(probe, headers, callback) {
@@ -297,11 +297,11 @@ function login(probe, headers, callback) {
         var url = 'http://127.0.0.1:9091/transmission/rpc',
             data = JSON.stringify({
                 'method': 'session-get'
-            }),
-            headers = {
-                'Content-Type': 'json; charset=UTF-8',
-                'X-Transmission-Session-Id': ''
-            };
+            });
+        headers = {
+            'Content-Type': 'json; charset=UTF-8',
+            'X-Transmission-Session-Id': ''
+        };
         probe.post({url:url, data:data, headers:headers}, function (error, args) {
             if (error === 409) {
                 exports.login(probe, args.headers, callback);

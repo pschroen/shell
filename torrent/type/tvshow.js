@@ -41,7 +41,7 @@ function parseResults(probe, page, results) {
     // S01E01, S01, 1x01 and 101 naming convention
     // With or without 'the ' .{0,4}
     // Strip season, episode and date from search text
-    var pattern = new RegExp('^((.{0,4}'+utils.searchTextPattern(probe).replace(/^(.*?).S\d{2}.*/i, '$1')+').*?.S?(\\d{1,2})[Ex]?(\\d{2})?)', 'i'),
+    var pattern = new RegExp('^((.{0,4}'+utils.searchTextPattern(probe).replace(/^(.*?).s\d{2}.*/i, '$1')+').*?.s?(\\d{1,2})[Ex]?(\\d{2})?)', 'i'),
         items = [],
         shows = [],
         destfiles = [],

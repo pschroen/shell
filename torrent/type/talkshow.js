@@ -80,7 +80,7 @@ function parseResults(probe, page, results) {
             }
             // Add new shows
             if (!(shows[year] && shows[year][month] && shows[year][month][day])) {
-                probe.log("["+exports.id+"] Downloading torrent for "+name);
+                probe.log("["+exports.id+"] Torrent for "+name);
                 torrents.push(item);
                 if (!shows[year]) shows[year] = [];
                 if (!shows[year][month]) shows[year][month] = [];
