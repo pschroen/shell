@@ -64,7 +64,7 @@ function complete(probe, item, callback) {
                 var fullpath = source+'/'+file;
                 if (fs.isFile(fullpath)) {
                     // Type keywords must be in filename
-                    var match = (new RegExp(shell[probe.item.info].types[probe.item.type].keywords.replace(/,\s?/g, '|'), 'i')).exec(file);
+                    var match = (new RegExp(shell.torrent.types[probe.item.type].keywords.replace(/,\s?/g, '|'), 'i')).exec(file);
                     if (match) files.push(fullpath);
                 }
             });
