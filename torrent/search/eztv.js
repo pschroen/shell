@@ -94,7 +94,7 @@ function parseResults(probe, page, url) {
             if ((new RegExp(pattern, 'i')).test(href)) results.push({filename:href});
         });
         return results;
-    }, utils.searchTextToPatternQuality(probe)));
+    }, utils.termsToPattern(utils.quality(probe))));
     if (exports.results.length) {
         if (probe.item.infobox) probe.item.infobox.boxes[probe.item.infobox.index].fields.info.credits = [{title:exports.name, href:url}];
         // Get name from dn
