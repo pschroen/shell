@@ -41,7 +41,7 @@ function parseResults(probe, page, results) {
     // S01E01, S01, 1x01 and 101 naming convention
     // With or without 'the ' .{0,4}
     // Strip season, episode and date from search text
-    var pattern = new RegExp('(.*?).s?(\\d{1,4})[Ex]?(\\d{2})?', 'i'),
+    var pattern = new RegExp('(.*?).s?(\\d+)[Ex]?(\\d{2})?', 'i'),
         items = [],
         shows = [],
         destfiles = [],
@@ -54,8 +54,15 @@ function parseResults(probe, page, results) {
             match = pattern.exec(name);
         if (match) {
             var title = match[1],
-                season = match[2].length > 3 ? parseInt(match[2].substring(0, 2), 10) : match[2].length > 2 ? parseInt(match[2].substring(0, 1), 10) : parseInt(match[2], 10),
-                episode = match[3] ? parseInt(match[3], 10) : match[2].length > 3 ? parseInt(match[2].substring(2), 10) : match[2].length > 2 ? parseInt(match[2].substring(1), 10) : 0;
+                season = match[2].length > 4 ? parseInt(match[2].substring(0, 1), 10) :
+                    match[2].length > 3 ? parseInt(match[2].substring(0, 2), 10) :
+                    match[2].length > 2 ? parseInt(match[2].substring(0, 1), 10) :
+                    parseInt(match[2], 10),
+                episode = match[3] ? parseInt(match[3], 10) :
+                    match[2].length > 4 ? parseInt(match[2].substring(1, 2), 10) :
+                    match[2].length > 3 ? parseInt(match[2].substring(2), 10) :
+                    match[2].length > 2 ? parseInt(match[2].substring(1), 10) :
+                    0;
             // Get shows from destination based on first result
             if (destfiles.constructor === Array) {
                 var dest = probe.memory.list[probe.item.text].dest || probe.remember({dest:shell.torrent.types[probe.item.type].dest+'/'+title}).dest,
@@ -66,8 +73,15 @@ function parseResults(probe, page, results) {
                         destfiles.push(file);
                         var x = pattern.exec(file);
                         if (x) {
-                            var s = x[2].length > 3 ? parseInt(x[2].substring(0, 2), 10) : x[2].length > 2 ? parseInt(x[2].substring(0, 1), 10) : parseInt(x[2], 10),
-                                e = x[3] ? parseInt(x[3], 10) : x[2].length > 3 ? parseInt(x[2].substring(2), 10) : x[2].length > 2 ? parseInt(x[2].substring(1), 10) : 0;
+                            var s = x[2].length > 4 ? parseInt(x[2].substring(0, 1), 10) :
+                                    x[2].length > 3 ? parseInt(x[2].substring(0, 2), 10) :
+                                    x[2].length > 2 ? parseInt(x[2].substring(0, 1), 10) :
+                                    parseInt(x[2], 10),
+                                e = x[3] ? parseInt(x[3], 10) :
+                                    x[2].length > 4 ? parseInt(x[2].substring(1, 2), 10) :
+                                    x[2].length > 3 ? parseInt(x[2].substring(2), 10) :
+                                    x[2].length > 2 ? parseInt(x[2].substring(1), 10) :
+                                    0;
                             if (!shows[s]) shows[s] = [];
                             shows[s][e] = fullpath;
                         }
