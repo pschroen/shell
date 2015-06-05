@@ -58,22 +58,20 @@ function parseResults(probe, page, url) {
     exports.results = utils.clone(page.evaluate(function (pattern) {
         var results = [];
         $("a[href^='magnet:']").each(function () {
-            var href = $(this).attr('href');
-            if ((new RegExp(pattern, 'i')).test(href)) {
-                results.push({
-                    filename: href,
-                    size: $(this).closest('td').next().text()
-                });
-            }
+            // Get name from dn
+            var href = $(this).attr('href'),
+                match = /dn=(.*?)[&$]/i.exec(href);
+            if (match) if ((new RegExp(pattern, 'i')).test(match[1])) results.push({
+                filename: href,
+                name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' '),
+                size: $(this).closest('td').next().text()
+            });
         });
         return results;
     }, utils.searchTextToPatternQuality(probe)));
     if (exports.results.length) {
         if (probe.item.infobox) probe.item.infobox.boxes[probe.item.infobox.index].fields.info.credits = [{title:exports.name, href:url}];
-        // Get name from dn
         exports.results.forEach(function (item) {
-            var match = /dn=(.*?)[&$]/i.exec(item.filename);
-            if (match) item.name = decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' ');
             item.size = utils.filesize(item.size);
         });
         try {

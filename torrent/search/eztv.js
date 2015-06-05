@@ -68,8 +68,8 @@ function getResults(probe, page, url) {
             }
         });
         return results;
-    // Strip 'the ', season, episode and date from search text
-    }, probe.item.text.replace(/^the\s/i, '').replace(/^(.*?).s?\d{2}.*/i, '$1'));
+    // Strip 'the ' and season from search text
+    }, probe.item.text.replace(/^the\s/i, '').replace(/^(.*?).s\d{2}.*/i, '$1'));
     if (!exports.results) {
         page.close();
         probe.error("["+exports.id+"] No search results");
@@ -86,22 +86,22 @@ Script.prototype.getResults = getResults;
  */
 function parseResults(probe, page, url) {
     "use strict";
-    // Clone to make results writable
-    exports.results = utils.clone(page.evaluate(function (pattern) {
+    exports.results = page.evaluate(function (pattern) {
         var results = [];
         $("a[href^='magnet:']").each(function () {
-            var href = $(this).attr('href');
-            if ((new RegExp(pattern, 'i')).test(href)) results.push({filename:href});
+            // Get name from dn
+            var href = $(this).attr('href'),
+                match = /dn=(.*?)[&$]/i.exec(href);
+            if (match) if ((new RegExp(pattern, 'i')).test(match[1])) results.push({
+                filename: href,
+                name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' ')
+            });
         });
         return results;
-    }, utils.termsToPattern(utils.quality(probe))));
+    // Strip search text
+    }, utils.termsToPattern(utils.termsToPattern(utils.textToPattern(probe.item.text.replace(/^(.*?).?(s\d+.*)?$/i, '$2'))+' '+utils.quality(probe))));
     if (exports.results.length) {
         if (probe.item.infobox) probe.item.infobox.boxes[probe.item.infobox.index].fields.info.credits = [{title:exports.name, href:url}];
-        // Get name from dn
-        exports.results.forEach(function (item) {
-            var match = /dn=(.*?)[&$]/i.exec(item.filename);
-            if (match) item.name = decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' ');
-        });
         try {
             probe.type.parseResults(probe, page, exports.results);
         } catch (err) {
