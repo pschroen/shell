@@ -60,11 +60,11 @@ function getResults(probe, page, url) {
     "use strict";
     exports.results = page.evaluate(function (text) {
         var results = false;
-        $("form#search select option").each(function () {
+        $("form#searchsearch_submit select option").each(function () {
             if ((new RegExp('^'+text, 'i')).exec($(this).text())) {
                 results = true;
-                $('form#search select').val($(this).val());
-                $('form#search').submit();
+                $('form#searchsearch_submit select').val($(this).val());
+                $('form#searchsearch_submit').submit();
             }
         });
         return results;
