@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals fs, shell */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "Torrent Generic-sanity (other)");
@@ -20,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name);
     if (callback) callback();
 }
@@ -34,7 +32,6 @@ Script.prototype.init = init;
  * @returns  {boolean}
  */
 function time(probe, item) {
-    "use strict";
     var addedDate = item.addedDate*1000, // Unix epoch
         name = item.name;
     // Time passed since added date must be less than list run millisec
@@ -57,7 +54,6 @@ Script.prototype.time = time;
  * @param    {function} callback Optional
  */
 function check(probe, item, callback) {
-    "use strict";
     var name = item.name;
     // Search pattern must be in name
     var match = (new RegExp(utils.searchTextToPatternQuality(probe), 'i')).exec(name);
@@ -74,7 +70,6 @@ Script.prototype.check = check;
  * @param    {function} callback Optional
  */
 function complete(probe, item, callback) {
-    "use strict";
     var name = item.name,
         source = shell.download.path+'/'+name,
         dest = probe.memory.list[probe.item.text].dest;

@@ -5,10 +5,8 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, node:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+"use strict";
 
 var utils = require('../utils'),
     Utils = utils.__Utils__(utils.Utils);
@@ -22,7 +20,6 @@ var utils = require('../utils'),
  * @returns  {string}
  */
 function searchText(probe) {
-    "use strict";
     return encodeURIComponent(text(probe));
 }
 Utils.prototype.searchText = searchText;
@@ -36,7 +33,6 @@ Utils.prototype.searchText = searchText;
  * @returns  {string}
  */
 function text(probe) {
-    "use strict";
     return probe.item.text.replace(/^(.*?),/, '$1');
 }
 Utils.prototype.text = text;

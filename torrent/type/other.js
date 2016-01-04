@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals shell */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "Torrent Generic-type (other)");
@@ -20,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name);
     if (callback) callback();
 }
@@ -36,7 +34,6 @@ Script.prototype.init = init;
  * @param    {Object[]} results Download objects
  */
 function parseResults(probe, page, results) {
-    "use strict";
     // Page not needed
     if (page) page.close();
     probe.log("["+exports.id+"] Parsing results");

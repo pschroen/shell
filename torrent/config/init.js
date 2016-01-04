@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals shell */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "Torrent Init");
@@ -20,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name);
     // No type
     if (!probe.item.type) {
@@ -91,7 +89,6 @@ Script.prototype.init = init;
  * @param    {Object[]} torrents Download objects
  */
 function box(probe, torrents) {
-    "use strict";
     var infobox = probe.item.infobox.boxes[probe.item.infobox.index];
     // Show first download object
     infobox.fields.info.title = torrents[0].name;

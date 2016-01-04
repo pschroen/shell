@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals shell */
+"use strict";
 
 var utils = require('../../modules/utils'),
     Utils = utils.__Utils__(utils.Utils);
@@ -22,7 +21,6 @@ var utils = require('../../modules/utils'),
  * @returns  {string}
  */
 function searchTextToPatternQuality(probe) {
-    "use strict";
     return utils.termsToPattern(utils.textToPattern(searchTextPattern(probe))+' '+quality(probe));
 }
 Utils.prototype.searchTextToPatternQuality = searchTextToPatternQuality;
@@ -34,7 +32,6 @@ Utils.prototype.searchTextToPatternQuality = searchTextToPatternQuality;
  * @returns  {string}
  */
 function searchTextToPattern(probe) {
-    "use strict";
     return utils.termsToPattern(utils.textToPattern(searchTextPattern(probe)));
 }
 Utils.prototype.searchTextToPattern = searchTextToPattern;
@@ -48,7 +45,6 @@ Utils.prototype.searchTextToPattern = searchTextToPattern;
  * @returns  {string}
  */
 function searchTextPattern(probe) {
-    "use strict";
     return text(probe).replace(/\s/g, '.').replace(/-/g, '.');
 }
 Utils.prototype.searchTextPattern = searchTextPattern;
@@ -63,7 +59,6 @@ Utils.prototype.searchTextPattern = searchTextPattern;
  * @returns  {string}
  */
 function searchTextQuality(probe) {
-    "use strict";
     return encodeURIComponent(text(probe)+' '+quality(probe));
 }
 Utils.prototype.searchTextQuality = searchTextQuality;
@@ -77,7 +72,6 @@ Utils.prototype.searchTextQuality = searchTextQuality;
  * @returns  {string}
  */
 function searchText(probe) {
-    "use strict";
     return encodeURIComponent(text(probe));
 }
 Utils.prototype.searchText = searchText;
@@ -91,7 +85,6 @@ Utils.prototype.searchText = searchText;
  * @returns  {string}
  */
 function text(probe) {
-    "use strict";
     return probe.item.text.replace(/^(.*?),.*/, '$1');
 }
 Utils.prototype.text = text;
@@ -105,7 +98,6 @@ Utils.prototype.text = text;
  * @returns  {string}
  */
 function quality(probe) {
-    "use strict";
     return shell.torrent.types[probe.item.type].quality.replace(/.([0-9]gb)$/, '');
 }
 Utils.prototype.quality = quality;

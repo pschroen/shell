@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals shell */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "isoHunt");
@@ -20,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name+" and searching for "+probe.item.text);
     var url = probe.search[probe.searchid]+'/js/json.php?ihq='+utils.searchTextQuality(probe);
     probe.get({url:url}, function (error, args) {

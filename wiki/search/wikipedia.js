@@ -5,10 +5,8 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, node:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "Wikipedia");
@@ -21,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|boolean} [extract]
  */
 function init(probe, callback, extract) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name+" and searching for "+probe.item.text);
     var url = probe.search[probe.searchid]+'/w/api.php?format=json&action=query&titles='+utils.searchText(probe)+'&prop=revisions|extracts&rvprop=content&continue';
     probe.get({url:url}, function (error, args) {
@@ -53,7 +50,6 @@ Script.prototype.init = init;
  * @param    {undefined|extractCallback} [callback]
  */
 function parseResults(probe, response, url, callback) {
-    "use strict";
     for (var x in response.query.pages) {
         var page = response.query.pages[x],
             title = page.title,

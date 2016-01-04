@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals shell */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "Transmission");
@@ -23,7 +22,6 @@ Script.prototype.millisec = 10000;
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name+" with "+(exports.millisec/1000)+" second interval");
     if (callback) callback();
 }
@@ -39,7 +37,6 @@ Script.prototype.init = init;
  * @param    {function} callback
  */
 function addTorrent(probe, torrents, callback) {
-    "use strict";
     if (!exports.sid) {
         exports.login(probe, null, function () {
             exports.addTorrent(probe, torrents, callback);
@@ -109,7 +106,6 @@ Script.prototype.addTorrent = addTorrent;
  * @param    {Object[]} torrents Download objects
  */
 function progress(probe, torrents) {
-    "use strict";
     if (!exports.sid) {
         exports.login(probe, null, function () {
             exports.progress(probe, torrents);
@@ -163,7 +159,6 @@ Script.prototype.progress = progress;
  * @param    {function} callback
  */
 function removeTorrent(probe, item, del, callback) {
-    "use strict";
     var id = item.id,
         name = item.name;
     probe.log("["+exports.id+"] Removing torrent"+(del ? " and file" : "")+" for "+name);
@@ -206,7 +201,6 @@ Script.prototype.removeTorrent = removeTorrent;
  * @param    {function} callback
  */
 function findTorrentHash(probe, torrents, callback) {
-    "use strict";
     for (var i = 0; i < probe.list.length; i++) {
         var item = probe.list[i];
         for (var j = 0; j < torrents.length; j++) {
@@ -238,7 +232,6 @@ Script.prototype.findTorrentHash = findTorrentHash;
  * @param    {function} callback
  */
 function torrentList(probe, callback) {
-    "use strict";
     var url = 'http://127.0.0.1:9091/transmission/rpc',
         data = JSON.stringify({
             'method': 'torrent-get',
@@ -291,7 +284,6 @@ Script.prototype.torrentList = torrentList;
  * @param    {function} callback
  */
 function login(probe, headers, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Getting session id");
     if (!headers) {
         var url = 'http://127.0.0.1:9091/transmission/rpc',

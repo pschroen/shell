@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals fs, shell */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(require('./other').Script, module.id, "Torrent No directory");
@@ -20,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name);
     if (callback) callback();
 }
@@ -34,7 +32,6 @@ Script.prototype.init = init;
  * @param    {function} callback Optional
  */
 function complete(probe, item, callback) {
-    "use strict";
     var name = item.name,
         source = shell.download.path+'/'+name,
         dest = probe.memory.list[probe.item.text].dest;

@@ -5,10 +5,9 @@
  * @license  MIT Licensed
  */
 
-/*jshint
- strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true,
- loopfunc:true, shadow:true, phantom:true, indent:4
-*/
+/* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, phantom:true, indent:4 */
+/* globals webpage, shell, ghost, $ */
+"use strict";
 
 var utils = require('./utils'),
     Script = utils.Script(module.id, "EZTV");
@@ -20,7 +19,6 @@ var utils = require('./utils'),
  * @param    {undefined|initCallback} [callback]
  */
 function init(probe, callback) {
-    "use strict";
     probe.log("["+exports.id+"] Loading "+exports.name+" and searching for "+probe.item.text);
     exports.results = null;
     var page = webpage.create();
@@ -57,7 +55,6 @@ Script.prototype.init = init;
  * @param    {string} url
  */
 function getResults(probe, page, url) {
-    "use strict";
     exports.results = page.evaluate(function (text) {
         var results = false;
         $("form#searchsearch_submit select option").each(function () {
@@ -85,7 +82,6 @@ Script.prototype.getResults = getResults;
  * @param    {string} url
  */
 function parseResults(probe, page, url) {
-    "use strict";
     exports.results = page.evaluate(function (pattern) {
         var results = [];
         $("a[href^='magnet:']").each(function () {
