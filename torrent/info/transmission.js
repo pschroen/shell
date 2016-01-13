@@ -45,7 +45,7 @@ function addTorrent(probe, torrents, callback) {
         probe.log("["+exports.id+"] Adding "+torrents.length+" torrents");
         var info = function (i) {
             var url = 'http://127.0.0.1:9091/transmission/rpc',
-                data = JSON.stringify({
+                form = JSON.stringify({
                     'method': 'torrent-add',
                     'arguments': {
                         'paused': false,
@@ -57,7 +57,7 @@ function addTorrent(probe, torrents, callback) {
                     'Content-Type': 'json; charset=UTF-8',
                     'X-Transmission-Session-Id': exports.sid
                 };
-            probe.post({url:url, data:data, headers:headers}, function (error, args) {
+            probe.post({url:url, form:form, headers:headers}, function (error, args) {
                 if (!error) {
                     var response = JSON.parse(args.body);
                     if (response.result === 'success') {
@@ -84,7 +84,7 @@ function addTorrent(probe, torrents, callback) {
                     exports.login(probe, args.headers, function () {
                         exports.addTorrent(probe, torrents, callback);
                     });
-                } else {
+                } else if (error) {
                     probe.error("["+exports.id+"] API endpoint "+url+" failed with "+error);
                 }
             });
@@ -163,7 +163,7 @@ function removeTorrent(probe, item, del, callback) {
         name = item.name;
     probe.log("["+exports.id+"] Removing torrent"+(del ? " and file" : "")+" for "+name);
     var url = 'http://127.0.0.1:9091/transmission/rpc',
-        data = JSON.stringify({
+        form = JSON.stringify({
             'method': 'torrent-remove',
             'arguments': {
                 'delete-local-data': del,
@@ -174,7 +174,7 @@ function removeTorrent(probe, item, del, callback) {
             'Content-Type': 'json; charset=UTF-8',
             'X-Transmission-Session-Id': exports.sid
         };
-    probe.post({url:url, data:data, headers:headers}, function (error, args) {
+    probe.post({url:url, form:form, headers:headers}, function (error, args) {
         if (!error) {
             var response = JSON.parse(args.body);
             if (response.result === 'success') {
@@ -186,7 +186,7 @@ function removeTorrent(probe, item, del, callback) {
             exports.login(probe, args.headers, function () {
                 exports.removeTorrent(probe, item, del, callback);
             });
-        } else {
+        } else if (error) {
             probe.error("["+exports.id+"] API endpoint "+url+" failed with "+error);
         }
     });
@@ -233,7 +233,7 @@ Script.prototype.findTorrentHash = findTorrentHash;
  */
 function torrentList(probe, callback) {
     var url = 'http://127.0.0.1:9091/transmission/rpc',
-        data = JSON.stringify({
+        form = JSON.stringify({
             'method': 'torrent-get',
             'arguments': {
                 'fields': [
@@ -249,7 +249,7 @@ function torrentList(probe, callback) {
             'Content-Type': 'json; charset=UTF-8',
             'X-Transmission-Session-Id': exports.sid
         };
-    probe.post({url:url, data:data, headers:headers}, function (error, args) {
+    probe.post({url:url, form:form, headers:headers}, function (error, args) {
         if (!error) {
             var response = JSON.parse(args.body);
             if (response.result === 'success') {
@@ -269,7 +269,7 @@ function torrentList(probe, callback) {
             exports.login(probe, args.headers, function () {
                 exports.torrentList(probe, callback);
             });
-        } else {
+        } else if (error) {
             probe.error("["+exports.id+"] API endpoint "+url+" failed with "+error);
         }
     });
@@ -287,17 +287,17 @@ function login(probe, headers, callback) {
     probe.log("["+exports.id+"] Getting session id");
     if (!headers) {
         var url = 'http://127.0.0.1:9091/transmission/rpc',
-            data = JSON.stringify({
+            form = JSON.stringify({
                 'method': 'session-get'
             });
         headers = {
             'Content-Type': 'json; charset=UTF-8',
             'X-Transmission-Session-Id': ''
         };
-        probe.post({url:url, data:data, headers:headers}, function (error, args) {
+        probe.post({url:url, form:form, headers:headers}, function (error, args) {
             if (error === 409) {
                 exports.login(probe, args.headers, callback);
-            } else {
+            } else if (error) {
                 probe.error("["+exports.id+"] API endpoint "+url+" failed with "+error);
             }
         });
