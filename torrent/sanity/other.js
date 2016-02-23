@@ -51,14 +51,17 @@ Script.prototype.time = time;
  *
  * @param    {Probe} probe Instance
  * @param    {Object} item Torrent item
- * @param    {function} callback Optional
+ * @returns  {boolean}
  */
-function check(probe, item, callback) {
+function check(probe, item) {
     var name = item.name;
     // Search pattern must be in name
     var match = (new RegExp(utils.searchTextToPatternQuality(probe), 'i')).exec(name);
-    if (!match) probe.log("["+exports.id+"] Sanity check mismatch for "+name);
-    if (callback) callback(item);
+    if (!match) {
+        probe.log("["+exports.id+"] Sanity check mismatch for "+name);
+        return false;
+    }
+    return true;
 }
 Script.prototype.check = check;
 

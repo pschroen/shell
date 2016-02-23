@@ -208,11 +208,14 @@ function findTorrentHash(probe, torrents, callback) {
                 hash = torrent.hash.toLowerCase();
             if (hash === item.hashString.toLowerCase()) {
                 probe.log("["+exports.id+"] Found torrent "+(j+1)+" of "+probe.length+" with infohash "+hash);
-                probe.sanity.check(probe, item, function (object) {
-                    var id = object.id;
+                if (probe.sanity.check(probe, item)) {
+                    var id = item.id;
                     torrent.id = id;
                     probe.memoryid.push(id);
-                });
+                } else {
+                    exports.removeTorrent(probe, item, true, function (object) {
+                    });
+                }
             }
         }
     }
