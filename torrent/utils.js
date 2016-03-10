@@ -40,12 +40,13 @@ Utils.prototype.searchTextToPattern = searchTextToPattern;
  * Search text pattern.
  *
  * Replace spaces and dashes with any single character (.).
+ * Single quotes are optional ('?).
  *
  * @param    {Probe} probe Instance
  * @returns  {string}
  */
 function searchTextPattern(probe) {
-    return text(probe).replace(/\s/g, '.').replace(/-/g, '.');
+    return text(probe).replace(/\s/g, '.').replace(/-/g, '.').replace(/'/g, '\'?');
 }
 Utils.prototype.searchTextPattern = searchTextPattern;
 
