@@ -223,6 +223,7 @@ function findTorrentHash(probe, torrents, callback) {
         probe.log("["+exports.id+"] Memory mismatch");
         probe.list = [];
         probe.memoryid = [];
+        probe.exit();
     }
     callback(torrents);
 }
