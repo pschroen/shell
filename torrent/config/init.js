@@ -16,38 +16,39 @@ var utils = require('./utils'),
  * Initialize.
  *
  * @param    {Probe} probe Instance
+ * @param    {undefined|Object} [load] Payload
  * @param    {undefined|initCallback} [callback]
  */
-function init(probe, callback) {
+function init(probe, load, callback) {
     probe.log("["+exports.id+"] Loading "+exports.name);
     // No type
     if (!probe.item.type) {
         // Wiki scripts
         probe.search = shell.torrent.wiki.split(/,\s?/g);
         probe.script = require(shell.path+'/shell/torrent/wiki/'+probe.search[probe.searchid].replace(/.*\//, '').replace(/(.*)\.(.*)\.(.*)/, '$2').replace(/(.*)\.(.*)/, '$1')+'.js');
-        probe.script.init(probe);
+        probe.script.init(probe, load);
     } else {
         // No infobox download action
         if (!(probe.item.infobox && probe.item.action === 'download' && probe.item.infobox.boxes[probe.item.infobox.index].data.torrents)) {
             // Search scripts
             probe.search = shell.torrent.types[probe.item.type].search.split(/,\s?/g);
             probe.script = require(shell.path+'/shell/torrent/search/'+probe.search[probe.searchid].replace(/.*\//, '').replace(/\..*/, '')+'.js');
-            probe.script.init(probe, function () {
+            probe.script.init(probe, load, function () {
                 // Type of media
                 var fullpath = shell.path+'/shell/torrent/type/'+probe.item.type+'.js';
                 if (!shell.exists(fullpath)) fullpath = shell.path+'/shell/torrent/type/other.js';
                 probe.type = require(fullpath);
-                probe.type.init(probe, function () {
+                probe.type.init(probe, load, function () {
                     // Torrent daemon
                     var fullpath = shell.path+'/shell/torrent/info/'+shell.torrent.info+'.js';
                     if (!shell.exists(fullpath)) fullpath = shell.path+'/shell/torrent/info/other.js';
                     probe.info = require(fullpath);
-                    probe.info.init(probe, function () {
+                    probe.info.init(probe, load, function () {
                         // Sanity checks and house cleaning
                         var fullpath = shell.path+'/shell/torrent/sanity/'+shell.torrent.types[probe.item.type].sanity+'.js';
                         if (!shell.exists(fullpath)) fullpath = shell.path+'/shell/torrent/sanity/other.js';
                         probe.sanity = require(fullpath);
-                        probe.sanity.init(probe);
+                        probe.sanity.init(probe, load);
                     });
                 });
             });
@@ -56,11 +57,11 @@ function init(probe, callback) {
             var fullpath = shell.path+'/shell/torrent/info/'+shell.torrent.info+'.js';
             if (!shell.exists(fullpath)) fullpath = shell.path+'/shell/torrent/info/other.js';
             probe.info = require(fullpath);
-            probe.info.init(probe, function () {
+            probe.info.init(probe, load, function () {
                 var fullpath = shell.path+'/shell/torrent/sanity/'+shell.torrent.types[probe.item.type].sanity+'.js';
                 if (!shell.exists(fullpath)) fullpath = shell.path+'/shell/torrent/sanity/other.js';
                 probe.sanity = require(fullpath);
-                probe.sanity.init(probe, function () {
+                probe.sanity.init(probe, load, function () {
                     var torrents = probe.item.infobox.boxes[probe.item.infobox.index].data.torrents;
                     // Specific index
                     if (torrents[probe.item.index]) torrents = [torrents[probe.item.index]];

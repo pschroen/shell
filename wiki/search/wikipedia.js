@@ -15,10 +15,11 @@ var utils = require('./utils'),
  * Initialize.
  *
  * @param    {Probe} probe Instance
+ * @param    {undefined|Object} [load] Payload
  * @param    {undefined|initCallback|extractCallback} [callback]
  * @param    {undefined|boolean} [extract]
  */
-function init(probe, callback, extract) {
+function init(probe, load, callback, extract) {
     probe.log("["+exports.id+"] Loading "+exports.name+" and searching for "+probe.item.text);
     var url = probe.search[probe.searchid]+'/w/api.php?format=json&action=query&titles='+utils.searchText(probe)+'&prop=revisions|extracts&rvprop=content&continue';
     probe.get({url:url}, function (error, args) {

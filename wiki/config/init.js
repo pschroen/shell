@@ -16,13 +16,14 @@ var utils = require('./utils'),
  * Initialize.
  *
  * @param    {Probe} probe Instance
+ * @param    {undefined|Object} [load] Payload
  * @param    {undefined|initCallback} [callback]
  */
-function init(probe, callback) {
+function init(probe, load, callback) {
     probe.log("["+exports.id+"] Loading "+exports.name);
     probe.search = shell.wiki.search.split(/,\s?/g);
     probe.script = require(shell.path+'/shell/wiki/search/'+probe.search[probe.searchid].replace(/.*\//, '').replace(/(.*)\.(.*)\.(.*)/, '$2').replace(/(.*)\.(.*)/, '$1')+'.js');
-    probe.script.init(probe);
+    probe.script.init(probe, load);
     if (callback) callback();
 }
 Script.prototype.init = init;

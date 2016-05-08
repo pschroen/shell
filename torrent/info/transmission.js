@@ -19,9 +19,10 @@ Script.prototype.millisec = 10000;
  * Initialize.
  *
  * @param    {Probe} probe Instance
+ * @param    {undefined|Object} [load] Payload
  * @param    {undefined|initCallback} [callback]
  */
-function init(probe, callback) {
+function init(probe, load, callback) {
     probe.log("["+exports.id+"] Loading "+exports.name+" with "+(exports.millisec/1000)+" second interval");
     if (callback) callback();
 }
