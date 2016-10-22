@@ -25,7 +25,7 @@ function init(probe, load, callback) {
     var page = webpage.create();
     page.settings.userAgent = ghost.userAgent;
     page.settings.loadImages = false;
-    var url = probe.search[probe.searchid]+'/';
+    var url = probe.search[probe.searchid]+'/search/'+utils.searchText(probe);
     page.onResourceError = function (resourceError) {
         page.errorString = resourceError.errorString;
         page.errorUrl = resourceError.url;
@@ -33,11 +33,7 @@ function init(probe, load, callback) {
     page.onLoadFinished = function (status) {
         if (status === 'success') {
             page.injectJs('lib/jquery.js');
-            if (!exports.results) {
-                exports.getResults(probe, page, url);
-            } else {
-                exports.parseResults(probe, page, url);
-            }
+            exports.parseResults(probe, page, url);
         } else {
             page.close();
             probe.error("["+exports.id+"] Page endpoint "+page.errorUrl+" error: "+page.errorString);
@@ -47,33 +43,6 @@ function init(probe, load, callback) {
     if (callback) callback();
 }
 Script.prototype.init = init;
-
-/**
- * Get results helper.
- *
- * @param    {Probe} probe Instance
- * @param    {WebPage} page Instance
- * @param    {string} url
- */
-function getResults(probe, page, url) {
-    exports.results = page.evaluate(function (text) {
-        var results = false;
-        $("form#searchsearch_submit select option").each(function () {
-            if ((new RegExp('^'+text, 'i')).exec($(this).text())) {
-                results = true;
-                $('form#searchsearch_submit select').val($(this).val());
-                $('form#searchsearch_submit').submit();
-            }
-        });
-        return results;
-    // Strip 'the ' and season from search text
-    }, probe.item.text.replace(/^the\s/i, '').replace(/^(.*?).s\d{2}.*/i, '$1'));
-    if (!exports.results) {
-        page.close();
-        probe.error("["+exports.id+"] No search results");
-    }
-}
-Script.prototype.getResults = getResults;
 
 /**
  * Parse results helper.
@@ -89,14 +58,13 @@ function parseResults(probe, page, url) {
             // Get name from dn
             var href = $(this).attr('href'),
                 match = /dn=(.*?)[&$]/i.exec(href);
-            if (match) if ((new RegExp(pattern, 'i')).test(match[1])) results.push({
+            if (match && (new RegExp(pattern, 'i')).test(match[1])) results.push({
                 filename: href,
                 name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' ')
             });
         });
         return results;
-    // Strip search text
-    }, utils.termsToPattern(utils.termsToPattern(utils.textToPattern(probe.item.text.replace(/^(.*?).?(s\d+.*)?$/i, '$2'))+' '+utils.quality(probe))));
+    }, utils.searchTextToPatternQuality(probe));
     if (exports.results.length) {
         if (probe.item.infobox) probe.item.infobox.boxes[probe.item.infobox.index].fields.info.credits = [{title:exports.name, href:url}];
         try {
