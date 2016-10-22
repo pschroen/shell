@@ -59,6 +59,8 @@ function parseResults(probe, page, results) {
     if (!(new RegExp('\\b'+utils.searchTextToPattern(probe)+'\\b', 'i')).test(destfiles)) {
         probe.log("["+exports.id+"] Torrent for "+item.name);
         if (probe.item.infobox) {
+            // Forget destination
+            probe.remember({dest:undefined});
             probe.config.box(probe, [item]);
             probe.box("["+exports.id+"] Infobox");
         } else {
@@ -69,6 +71,8 @@ function parseResults(probe, page, results) {
         }
     } else {
         if (probe.item.infobox) {
+            // Forget destination
+            probe.remember({dest:undefined});
             probe.item.infobox.boxes[probe.item.infobox.index].fields.info.buttons = [{label:"Nothing new", item:{type:probe.item.type}}];
             probe.box("["+exports.id+"] Infobox");
         } else {

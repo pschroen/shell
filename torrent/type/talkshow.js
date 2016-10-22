@@ -44,8 +44,6 @@ function parseResults(probe, page, results) {
         torrents = [];
     // Specific index
     if (probe.item.index && results[probe.item.index]) results = [results[probe.item.index]];
-    // Forget destination
-    delete probe.memory.list[probe.item.text].dest;
     // Build shows
     results.forEach(function (item) {
         var name = item.name,
@@ -88,6 +86,8 @@ function parseResults(probe, page, results) {
     });
     if (torrents.length) {
         if (probe.item.infobox) {
+            // Forget destination
+            probe.remember({dest:undefined});
             probe.config.box(probe, torrents);
             probe.box("["+exports.id+"] Infobox");
         } else {
@@ -98,6 +98,8 @@ function parseResults(probe, page, results) {
         }
     } else {
         if (probe.item.infobox) {
+            // Forget destination
+            probe.remember({dest:undefined});
             probe.item.infobox.boxes[probe.item.infobox.index].fields.info.buttons = [{label:"Nothing new", item:{type:probe.item.type}}];
             probe.box("["+exports.id+"] Infobox");
         } else {

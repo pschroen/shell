@@ -45,6 +45,8 @@ function parseResults(probe, page, results) {
     // Remember destination
     probe.remember({dest:shell.torrent.types[probe.item.type].dest});
     if (probe.item.infobox) {
+        // Forget destination
+        probe.remember({dest:undefined});
         probe.config.box(probe, [item]);
         probe.box("["+exports.id+"] Infobox");
     } else {
