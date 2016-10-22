@@ -82,13 +82,13 @@ Utils.prototype.searchText = searchText;
  * Search text filters.
  *
  * Only use search text part before comma (,).
- * Strip season, episode and date from search text.
+ * Strip season, episode and date ranges from search text.
  *
  * @param    {Probe} probe Instance
  * @returns  {string}
  */
 function text(probe) {
-    return probe.item.text.replace(/^(.*?),.*/, '$1').replace(/^(.*?).s\d{2}.*/i, '$1');
+    return /\d\+$/.test(probe.item.text) ? probe.item.text.replace(/^(.*?),.*/, '$1').replace(/^(.*?).s\d{2}.*/i, '$1') : probe.item.text.replace(/^(.*?),.*/, '$1');
 }
 Utils.prototype.text = text;
 
