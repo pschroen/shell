@@ -28,15 +28,13 @@ function init(probe, load, callback) {
                 results = [];
             if (response.constructor === Array) {
                 response.forEach(function (item) {
-                    var value = item.childNodes[0].nodeValue;
-                    if ((new RegExp(utils.searchTextToPattern(probe), 'i')).test(value)) {
-                        // Get name from dn
-                        var match = /dn=(.*?)[&$]/i.exec(value);
-                        if (match) results.push({
-                            filename: value,
-                            name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' ')
-                        });
-                    }
+                    // Get name from dn
+                    var value = item.childNodes[0].nodeValue,
+                        match = /dn=(.*?)[&$]/i.exec(value);
+                    if (match && (new RegExp(utils.searchTextToPattern(probe), 'i')).test(match[1])) results.push({
+                        filename: value,
+                        name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' ')
+                    });
                 });
             }
             if (results.length) {

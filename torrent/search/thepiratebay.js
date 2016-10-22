@@ -59,7 +59,7 @@ function parseResults(probe, page, url) {
             // Get name from dn
             var href = $(this).attr('href'),
                 match = /dn=(.*?)[&$]/i.exec(href);
-            if (match) if ((new RegExp(pattern, 'i')).test(match[1])) results.push({
+            if (match && (new RegExp(pattern, 'i')).test(match[1])) results.push({
                 filename: href,
                 name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' '),
                 text: $(this).closest('.detDesc').text()

@@ -76,21 +76,15 @@ Script.prototype.parseResults = parseResults;
  */
 function box(probe, url) {
     // Map types
-    var types = [];
+    var types = {};
     exports.results.forEach(function (item) {
         switch (item) {
             case '/browse/208': // HD - TV shows
-                if (!types.tvshow) types.tvshow = 0;
-                types.tvshow++;
-                break;
-            case '/browse/207': // HD - Movies
-                if (!types.movie) types.movie = 0;
-                types.movie++;
-                break;
             case '/browse/205': // TV shows
                 if (!types.tvshow) types.tvshow = 0;
                 types.tvshow++;
                 break;
+            case '/browse/207': // HD - Movies
             case '/browse/201': // Movies
                 if (!types.movie) types.movie = 0;
                 types.movie++;
@@ -102,9 +96,15 @@ function box(probe, url) {
         }
     });
     // Sort by most popular
-    types.sort(function (a, b) {
-        return a < b ? -1 : 1;
+    var keys = Object.keys(types).sort(function (a, b) {
+        return types[b]-types[a];
     });
+    var sorted = {};
+    for (var x in keys) {
+        var key = keys[x];
+        sorted[key] = types[key];
+    }
+    types = sorted;
     // Build infoboxes
     var boxes = [],
         count = 0;

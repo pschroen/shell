@@ -25,7 +25,8 @@ function init(probe, load, callback) {
     var page = webpage.create();
     page.settings.userAgent = ghost.userAgent;
     page.settings.loadImages = false;
-    var url = probe.search[probe.searchid]+'/usearch/'+utils.searchTextQuality(probe)+'/';
+    var url = probe.search[probe.searchid]+'/usearch/'+utils.searchText(probe)+'/';
+    probe.log(url);
     page.onResourceError = function (resourceError) {
         page.errorString = resourceError.errorString;
         page.errorUrl = resourceError.url;
@@ -59,7 +60,7 @@ function parseResults(probe, page, url) {
             // Get name from dn
             var href = $(this).attr('href'),
                 match = /dn=(.*?)[&$]/i.exec(href);
-            if (match) if ((new RegExp(pattern, 'i')).test(match[1])) results.push({
+            if (match && (new RegExp(pattern, 'i')).test(match[1])) results.push({
                 filename: href,
                 name: decodeURIComponent(match[1]).replace(/\+/g, '.').replace(/\./g, ' '),
                 size: $(this).closest('td').next().text()

@@ -79,32 +79,35 @@ function box(probe, url) {
     var types = [];
     exports.results.forEach(function (item) {
         switch (item) {
-            case '/tv/': // TV
+            case '/tv/':
                 if (!types.tvshow) types.tvshow = 0;
                 types.tvshow++;
                 break;
-            case '/movies/': // Movies
+            case '/movies/':
+            case '/anime/':
                 if (!types.movie) types.movie = 0;
                 types.movie++;
                 break;
-            case '/anime/': // Anime
-                if (!types.movie) types.movie = 0;
-                types.movie++;
-                break;
-            case '/music/': // Music
+            case '/music/':
                 if (!types.music) types.music = 0;
                 types.music++;
                 break;
-            case '/xxx/': // XXX
+            case '/xxx/':
                 if (!types.other) types.other = 0;
                 types.other++;
                 break;
         }
     });
     // Sort by most popular
-    types.sort(function (a, b) {
-        return a < b ? -1 : 1;
+    var keys = Object.keys(types).sort(function (a, b) {
+        return types[b]-types[a];
     });
+    var sorted = {};
+    for (var x in keys) {
+        var key = keys[x];
+        sorted[key] = types[key];
+    }
+    types = sorted;
     // Build infoboxes
     var boxes = [],
         count = 0;
