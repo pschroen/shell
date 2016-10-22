@@ -21,7 +21,7 @@ var utils = require('../../modules/utils'),
  * @returns  {string}
  */
 function searchTextToPatternQuality(probe) {
-    return utils.termsToPattern(utils.textToPattern(searchTextPattern(probe))+' '+quality(probe));
+    return utils.termsToPattern(utils.textToPattern('^'+searchTextPattern(probe))+' '+quality(probe));
 }
 Utils.prototype.searchTextToPatternQuality = searchTextToPatternQuality;
 
@@ -32,13 +32,14 @@ Utils.prototype.searchTextToPatternQuality = searchTextToPatternQuality;
  * @returns  {string}
  */
 function searchTextToPattern(probe) {
-    return utils.termsToPattern(utils.textToPattern(searchTextPattern(probe)));
+    return utils.termsToPattern(utils.textToPattern('^'+searchTextPattern(probe)));
 }
 Utils.prototype.searchTextToPattern = searchTextToPattern;
 
 /**
  * Search text pattern.
  *
+ * Only use search text part before comma (,).
  * Replace spaces and dashes with any single character (.).
  * Single quotes are optional ('?).
  *
@@ -46,7 +47,7 @@ Utils.prototype.searchTextToPattern = searchTextToPattern;
  * @returns  {string}
  */
 function searchTextPattern(probe) {
-    return text(probe).replace(/\s/g, '.').replace(/-/g, '.').replace(/'/g, '\'?');
+    return probe.item.text.replace(/^(.*?),.*/, '$1').replace(/\s/g, '.').replace(/-/g, '.').replace(/'/g, '\'?');
 }
 Utils.prototype.searchTextPattern = searchTextPattern;
 
@@ -81,12 +82,13 @@ Utils.prototype.searchText = searchText;
  * Search text filters.
  *
  * Only use search text part before comma (,).
+ * Strip season, episode and date from search text.
  *
  * @param    {Probe} probe Instance
  * @returns  {string}
  */
 function text(probe) {
-    return probe.item.text.replace(/^(.*?),.*/, '$1');
+    return probe.item.text.replace(/^(.*?),.*/, '$1').replace(/^(.*?).s\d{2}.*/i, '$1');
 }
 Utils.prototype.text = text;
 

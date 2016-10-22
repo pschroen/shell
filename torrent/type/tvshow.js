@@ -37,8 +37,6 @@ function parseResults(probe, page, results) {
     if (page) page.close();
     probe.log("["+exports.id+"] Parsing results");
     // S01E01, S01, 1x01 and 101 naming convention
-    // With or without 'the ' .{0,4}
-    // Strip season, episode and date from search text
     var pattern = new RegExp('(.*?).s?(\\d+)[Ex]?(\\d{2})?', 'i'),
         items = [],
         shows = [],
@@ -46,12 +44,14 @@ function parseResults(probe, page, results) {
         torrents = [];
     // Specific index
     if (probe.item.index && results[probe.item.index]) results = [results[probe.item.index]];
+    // Forget destination
+    delete probe.memory.list[probe.item.text].dest;
     // Build shows
     results.forEach(function (item) {
         var name = item.name,
             match = pattern.exec(name);
         if (match) {
-            var title = match[1],
+            var title = match[1].replace(/\./g, ' '),
                 season = match[2].length > 4 ? parseInt(match[2].substring(0, 1), 10) :
                     match[2].length > 3 ? parseInt(match[2].substring(0, 2), 10) :
                     match[2].length > 2 ? parseInt(match[2].substring(0, 1), 10) :

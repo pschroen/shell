@@ -86,6 +86,8 @@ function complete(probe, item, callback) {
                 // Last thread
                 if (shell.threadid >= shell.threads.length) shell.next();
             }
+            // Forget infobox
+            delete probe.item.infobox;
             if (callback) callback(item);
         });
     };

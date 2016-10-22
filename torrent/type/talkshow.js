@@ -37,21 +37,21 @@ function parseResults(probe, page, results) {
     if (page) page.close();
     probe.log("["+exports.id+"] Parsing results");
     // YYYY-MM-DD naming convention
-    // With or without 'the ' .{0,4}
-    // Strip date from search text
-    var pattern = new RegExp('((.{0,4}'+utils.searchTextPattern(probe).replace(/^(.*?).\d{4}.*/i, '$1')+').(\\d{4}).(\\d{2}).(\\d{2}))', 'i'),
+    var pattern = new RegExp('(.*?).(\\d{4}).(\\d{2}).(\\d{2}))', 'i'),
         items = [],
         shows = [],
         destfiles = [],
         torrents = [];
     // Specific index
     if (probe.item.index && results[probe.item.index]) results = [results[probe.item.index]];
+    // Forget destination
+    delete probe.memory.list[probe.item.text].dest;
     // Build shows
     results.forEach(function (item) {
         var name = item.name,
             match = pattern.exec(name);
         if (match) {
-            var title = match[2],
+            var title = match[2].replace(/\./g, ' '),
                 year = parseInt(match[3], 10),
                 month = parseInt(match[4], 10),
                 day = parseInt(match[5], 10);
