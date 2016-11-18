@@ -40,10 +40,11 @@ function parseResults(probe, page, results) {
     probe.log("["+exports.id+"] Parsing results");
     // Specific index
     var item = probe.item.index && results[probe.item.index] ? results[probe.item.index] : results[0];
-    // Any torrent
-    probe.log("["+exports.id+"] Torrent for "+item.name);
     // Remember destination
     probe.remember({dest:shell.torrent.types[probe.item.type].dest});
+    // Any torrent
+    probe.log("["+exports.id+"] Torrent for "+item.name);
+    item.dest = probe.memory.list[probe.item.text].dest;
     if (probe.item.infobox) {
         // Forget destination
         probe.remember({dest:undefined});

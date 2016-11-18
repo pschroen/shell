@@ -88,6 +88,7 @@ function parseResults(probe, page, results) {
             // Add new shows
             if (!(shows[season] && shows[season][episode])) {
                 probe.log("["+exports.id+","+season+"x"+episode+"] Torrent for "+name);
+                item.dest = probe.memory.list[probe.item.text].dest;
                 torrents.push(item);
                 if (!shows[season]) shows[season] = [];
                 shows[season][episode] = item.filename;

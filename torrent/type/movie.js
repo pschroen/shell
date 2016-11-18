@@ -58,6 +58,7 @@ function parseResults(probe, page, results) {
     var destfiles = fs.list(probe.remember({dest:shell.torrent.types[probe.item.type].dest}).dest).join('|');
     if (!(new RegExp('\\b'+utils.searchTextToPattern(probe)+'\\b', 'i')).test(destfiles)) {
         probe.log("["+exports.id+"] Torrent for "+item.name);
+        item.dest = probe.memory.list[probe.item.text].dest;
         if (probe.item.infobox) {
             // Forget destination
             probe.remember({dest:undefined});

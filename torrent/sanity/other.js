@@ -76,7 +76,7 @@ Script.prototype.check = check;
 function complete(probe, item, callback) {
     var name = item.name,
         source = shell.download.path+'/'+name,
-        dest = probe.memory.list[probe.item.text].dest;
+        dest = probe.memory.list[probe.item.text].dest || item.dest;
     var cleanup = function () {
         probe.log("["+exports.id+"] Cleaning up");
         probe.exec({command:'rm "'+shell.download.path+'/'+name+'.fastresume"'}, function (error, args) {
@@ -86,8 +86,6 @@ function complete(probe, item, callback) {
                 // Last thread
                 if (shell.threadid >= shell.threads.length) shell.next();
             }
-            // Forget infobox
-            delete probe.item.infobox;
             if (callback) callback(item);
         });
     };

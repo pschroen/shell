@@ -116,23 +116,25 @@ function progress(probe, torrents) {
             exports.progress(probe, torrents);
         });
     } else if (!probe.memoryid.length) {
-        exports.findTorrentHash(probe, torrents, function (objects) {
-            exports.progress(probe, objects);
+        exports.findTorrentHash(probe, torrents, function (torrents) {
+            exports.progress(probe, torrents);
         });
     } else {
         var total = 0;
         for (var i = 0; i < probe.list.length; i++) {
             var item = probe.list[i];
             for (var j = 0; j < probe.memoryid.length; j++) {
-                var id = probe.memoryid[j];
+                var torrent = probe.memoryid[j],
+                    id = torrent.id;
                 if (id === item.id) {
                     var percentDone = item.percentDone*100,
                         complete = percentDone >= 100;
                     if (complete || probe.sanity.time(probe, item)) {
-                        probe.memoryid.splice(j, 1);
-                        exports.removeTorrent(probe, item, !complete, function (object) {
-                            if (object.percentDone*100 >= 100) probe.sanity.complete(probe, object);
+                        item.dest = torrent.dest;
+                        exports.removeTorrent(probe, item, !complete, function (item) {
+                            if (item.percentDone*100 >= 100) probe.sanity.complete(probe, item);
                         });
+                        probe.memoryid.splice(j, 1);
                     } else {
                         total += percentDone;
                     }
@@ -210,11 +212,10 @@ function findTorrentHash(probe, torrents, callback) {
             if (hash === item.hashString.toLowerCase()) {
                 probe.log("["+exports.id+"] Found torrent "+(j+1)+" of "+probe.length+" with infohash "+hash);
                 if (probe.sanity.check(probe, item)) {
-                    var id = item.id;
-                    torrent.id = id;
-                    probe.memoryid.push(id);
+                    torrent.id = item.id;
+                    probe.memoryid.push(torrent);
                 } else {
-                    exports.removeTorrent(probe, item, true, function (object) {
+                    exports.removeTorrent(probe, item, true, function (item) {
                     });
                 }
             }
